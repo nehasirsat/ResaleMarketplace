@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
-import { initiateResale } from "@/lib/mockApi";
+import { initiateResale, mockProducts, Product } from "@/lib/mockApi";
 import {
   ShoppingCart,
   Tag,
@@ -16,13 +16,16 @@ import {
 
 export default function ProductPage() {
   const navigate = useNavigate();
-  const { product, setCorrId, setCurrentStep } = useResale();
+  const { product, setCorrId, setCurrentStep, setProduct } = useResale();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const netProceeds = (product.price * 0.85 * 0.9).toFixed(2);
+  const netProceeds = selectedProduct 
+    ? (selectedProduct.price * 0.85 * 0.9).toFixed(2)
+    : (product.price * 0.85 * 0.9).toFixed(2);
 
   useEffect(() => {
     setCurrentStep(0);
@@ -30,20 +33,26 @@ export default function ProductPage() {
     return () => clearTimeout(t);
   }, []);
 
-  function handleResellClick() {
+  function handleResellClick(prod: Product) {
+    setSelectedProduct(prod);
     setShowModal(true);
     setTimeout(() => setModalVisible(true), 20);
   }
 
   function handleModalClose() {
     setModalVisible(false);
-    setTimeout(() => setShowModal(false), 300);
+    setTimeout(() => {
+      setShowModal(false);
+      setSelectedProduct(null);
+    }, 300);
   }
 
   async function handleConfirm() {
+    if (!selectedProduct) return;
     setLoading(true);
     try {
-      const id = await initiateResale(product.id);
+      setProduct(selectedProduct);
+      const id = await initiateResale(selectedProduct.id);
       setCorrId(id);
       setCurrentStep(1);
       navigate("/redirect");
@@ -69,7 +78,7 @@ export default function ProductPage() {
       />
 
       <div className="relative z-10 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Brand header */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-full px-4 py-1.5 mb-6">
@@ -78,7 +87,7 @@ export default function ProductPage() {
                 className="text-[#F5A623] text-xs font-semibold tracking-[0.2em]"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
-                LIMITED EDITION
+                LIMITED EDITION COLLECTION
               </span>
               <Star className="w-3 h-3 text-[#F5A623] fill-[#F5A623]" />
             </div>
@@ -86,118 +95,101 @@ export default function ProductPage() {
               className="text-4xl sm:text-5xl font-black text-white tracking-tight"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
-              {product.brand}
+              LUMINARY
             </h1>
             <div className="mt-2 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mx-auto" />
           </div>
 
-          {/* Product Card */}
-          <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-yellow-400/10">
-            <div className="grid md:grid-cols-2 gap-0">
-              {/* Image */}
-              <div className="relative overflow-hidden bg-gradient-to-br from-[#0d1f3c] to-[#060f1f]">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-80 md:h-full object-cover opacity-90 mix-blend-luminosity"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/60 via-transparent to-transparent" />
-                {/* EON Badge */}
-                <div className="absolute bottom-4 right-4">
-                  <div className="bg-[#0A1931]/90 backdrop-blur-sm border border-[#F5A623]/30 rounded-lg px-3 py-2 shadow-lg">
-                    <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-[#F5A623]" />
-                      <div>
-                        <div
-                          className="text-[10px] text-[#F5A623] font-bold tracking-widest"
-                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        >
-                          EON CERTIFIED
-                        </div>
-                        <div
-                          className="text-[8px] text-white/50"
-                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        >
-                          AUTHENTIC DIGITAL TWIN
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mockProducts.map((prod) => (
+              <div
+                key={prod.id}
+                className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-yellow-400/10 hover:ring-yellow-400/20 transition-all duration-300 hover:scale-[1.02]"
+              >
+                {/* Image */}
+                <div className="relative overflow-hidden bg-gradient-to-br from-[#0d1f3c] to-[#060f1f] h-64">
+                  <img
+                    src={prod.image}
+                    alt={prod.name}
+                    className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/60 via-transparent to-transparent" />
+                  {/* EON Badge */}
+                  <div className="absolute bottom-3 right-3">
+                    <div className="bg-[#0A1931]/90 backdrop-blur-sm border border-[#F5A623]/30 rounded-lg px-2 py-1.5 shadow-lg">
+                      <div className="flex items-center gap-1.5">
+                        <Shield className="w-3 h-3 text-[#F5A623]" />
+                        <div>
+                          <div
+                            className="text-[9px] text-[#F5A623] font-bold tracking-widest"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                          >
+                            EON CERTIFIED
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Info */}
-              <div className="p-6 md:p-8 flex flex-col justify-between">
-                <div>
+                {/* Info */}
+                <div className="p-5">
                   {/* SKU */}
-                  <div className="inline-flex items-center gap-1.5 bg-[#F5A623]/10 border border-[#F5A623]/20 rounded px-2 py-1 mb-4">
+                  <div className="inline-flex items-center gap-1.5 bg-[#F5A623]/10 border border-[#F5A623]/20 rounded px-2 py-1 mb-3">
                     <Tag className="w-3 h-3 text-[#F5A623]" />
                     <span
                       className="text-[#F5A623] text-[10px] font-medium tracking-widest"
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     >
-                      {product.sku}
+                      {prod.sku}
                     </span>
                   </div>
 
                   <h2
-                    className="text-2xl sm:text-3xl font-black text-white mb-3 leading-tight"
+                    className="text-xl font-black text-white mb-2 leading-tight"
                     style={{ fontFamily: "'Syne', sans-serif" }}
                   >
-                    {product.name}
+                    {prod.name}
                   </h2>
 
-                  <p className="text-white/60 text-sm leading-relaxed mb-6">
-                    {product.description}
+                  <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-2">
+                    {prod.description}
                   </p>
 
                   {/* Price */}
-                  <div className="flex items-baseline gap-2 mb-6">
+                  <div className="flex items-baseline gap-2 mb-4">
                     <span
-                      className="text-3xl font-black text-white"
+                      className="text-2xl font-black text-white"
                       style={{ fontFamily: "'Syne', sans-serif" }}
                     >
-                      ${product.price.toLocaleString()}
+                      ${prod.price.toLocaleString()}
                     </span>
                     <span className="text-white/40 text-sm">USD</span>
                   </div>
 
-                  {/* Features */}
-                  <div className="space-y-2 mb-8">
-                    {[
-                      "Swiss Movement",
-                      "Sapphire Crystal",
-                      "EON Digital Certificate",
-                    ].map((f) => (
-                      <div key={f} className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#F5A623]" />
-                        <span className="text-white/50 text-sm">{f}</span>
-                      </div>
-                    ))}
+                  {/* Actions */}
+                  <div className="space-y-2">
+                    <button
+                      disabled
+                      className="w-full flex items-center justify-center gap-2 bg-white/5 border border-white/10 rounded-xl py-2.5 text-white/30 font-semibold cursor-not-allowed text-sm"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      Buy Now
+                    </button>
+                    <button
+                      onClick={() => handleResellClick(prod)}
+                      className="w-full flex items-center justify-center gap-2 bg-[#F5A623] hover:bg-[#e8961a] active:bg-[#d4861a] rounded-xl py-2.5 text-[#0A1931] font-bold transition-all duration-200 shadow-lg shadow-[#F5A623]/20 hover:shadow-[#F5A623]/30 text-sm"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    >
+                      <Tag className="w-4 h-4" />
+                      Resell Now
+                    </button>
                   </div>
                 </div>
-
-                {/* Actions */}
-                <div className="space-y-3">
-                  <button
-                    disabled
-                    className="w-full flex items-center justify-center gap-2 bg-white/5 border border-white/10 rounded-xl py-3.5 text-white/30 font-semibold cursor-not-allowed"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                    Buy Now
-                  </button>
-                  <button
-                    onClick={handleResellClick}
-                    className="w-full flex items-center justify-center gap-2 bg-[#F5A623] hover:bg-[#e8961a] active:bg-[#d4861a] rounded-xl py-3.5 text-[#0A1931] font-bold transition-all duration-200 shadow-lg shadow-[#F5A623]/20 hover:shadow-[#F5A623]/30"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                  >
-                    <Tag className="w-4 h-4" />
-                    Resell Now
-                  </button>
-                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -254,8 +246,8 @@ export default function ProductPage() {
               </div>
               <div className="flex items-center gap-3">
                 <img
-                  src={product.image}
-                  alt={product.name}
+                  src={selectedProduct?.image || product.image}
+                  alt={selectedProduct?.name || product.name}
                   className="w-12 h-12 object-cover rounded-lg border border-white/10 opacity-80"
                 />
                 <div>
@@ -263,13 +255,13 @@ export default function ProductPage() {
                     className="text-white font-bold text-sm"
                     style={{ fontFamily: "'Syne', sans-serif" }}
                   >
-                    {product.name}
+                    {selectedProduct?.name || product.name}
                   </div>
                   <div
                     className="text-white/40 text-xs"
                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   >
-                    {product.sku}
+                    {selectedProduct?.sku || product.sku}
                   </div>
                 </div>
               </div>
@@ -300,7 +292,7 @@ export default function ProductPage() {
                     Item
                   </div>
                   <div className="text-white text-xs font-semibold text-center leading-tight">
-                    {product.name}
+                    {selectedProduct?.name || product.name}
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-1 px-2">

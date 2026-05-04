@@ -5,6 +5,7 @@ interface ResaleContextType {
   corrId: string | null;
   setCorrId: (id: string) => void;
   product: Product;
+  setProduct: (product: Product) => void;
   netProceeds: number;
   setNetProceeds: (amount: number) => void;
   orderDetails: OrderDetails | null;
@@ -21,6 +22,7 @@ const ResaleContext = createContext<ResaleContextType | null>(null);
 
 export function ResaleProvider({ children }: { children: ReactNode }) {
   const [corrId, setCorrId] = useState<string | null>(null);
+  const [product, setProduct] = useState<Product>(mockProduct);
   const [netProceeds, setNetProceeds] = useState<number>(0);
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -36,7 +38,8 @@ export function ResaleProvider({ children }: { children: ReactNode }) {
       value={{
         corrId,
         setCorrId,
-        product: mockProduct,
+        product,
+        setProduct,
         netProceeds,
         setNetProceeds,
         orderDetails,
