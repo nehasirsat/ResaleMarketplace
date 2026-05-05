@@ -72,7 +72,7 @@ export default function ItemListing() {
         setNetProceeds(parseFloat(price));
       }
       
-      navigate("/sale-confirmation");
+      navigate("/listing-pending");
     } finally {
       setLoading(false);
     }

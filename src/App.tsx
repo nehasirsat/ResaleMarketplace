@@ -7,6 +7,7 @@ import MarketplaceLogin from "@/pages/MarketplaceLogin";
 import CreateAccount from "@/pages/CreateAccount";
 import ItemListing from "@/pages/ItemListing";
 import SaleConfirmation from "@/pages/SaleConfirmation";
+import ListingPending from "@/pages/ListingPending";
 import GiftCardScreen from "@/pages/GiftCardScreen";
 import SaleStatus from "@/pages/SaleStatus";
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/list-item" element={<ItemListing />} />
           <Route path="/sale-confirmation" element={<SaleConfirmation />} />
+          <Route path="/listing-pending" element={<ListingPending />} />
           <Route path="/giftcard" element={<GiftCardScreen />} />
         </Routes>
       </ResaleProvider>
