@@ -12,6 +12,8 @@ import {
   X,
   CreditCard,
   Package,
+  Home,
+  CalendarDays,
 } from "lucide-react";
 
 export default function ProductPage() {
@@ -79,6 +81,15 @@ export default function ProductPage() {
 
       <div className="relative z-10 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
+          {/* Home icon
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={() => navigate("/marketplace-home")}
+              className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition text-white/60 hover:text-white"
+            >
+              <Home className="w-4 h-4" />
+            </button>
+          </div> */}
           {/* Brand header */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-full px-4 py-1.5 mb-6">
@@ -100,7 +111,15 @@ export default function ProductPage() {
             <div className="mt-2 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mx-auto" />
           </div>
 
-          {/* Products Grid */}
+          {/* Past orders label */}
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="h-px flex-1 bg-white/10 max-w-xs" />
+            <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5">
+              <Package className="w-3.5 h-3.5 text-[#F5A623]" />
+              <span className="text-white/50 text-xs tracking-widest uppercase">Past Orders</span>
+            </div>
+            <div className="h-px flex-1 bg-white/10 max-w-xs" />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {mockProducts.map((prod) => (
               <div
@@ -115,10 +134,29 @@ export default function ProductPage() {
                     className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/60 via-transparent to-transparent" />
+                  {/* EON Badge */}
+                  <div className="absolute bottom-3 right-3">
+                    <div className="bg-[#0A1931]/90 backdrop-blur-sm border border-[#F5A623]/30 rounded-lg px-2 py-1.5 shadow-lg">
+                      <div className="flex items-center gap-1.5">
+                        <Shield className="w-3 h-3 text-[#F5A623]" />
+                        <div
+                          className="text-[9px] text-[#F5A623] font-bold tracking-widest"
+                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                          EON CERTIFIED
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Info */}
                 <div className="p-5">
+                  {/* Order meta */}
+                  <div className="flex items-center gap-2 mb-3 text-white/30 text-xs">
+                    <CalendarDays className="w-3 h-3" />
+                    <span>Ordered 12 Jan 2024</span>
+                  </div>
                   {/* SKU */}
                   <div className="inline-flex items-center gap-1.5 bg-[#F5A623]/10 border border-[#F5A623]/20 rounded px-2 py-1 mb-3">
                     <Tag className="w-3 h-3 text-[#F5A623]" />
