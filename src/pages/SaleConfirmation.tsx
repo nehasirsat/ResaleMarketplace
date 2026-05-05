@@ -14,8 +14,7 @@ export default function SaleConfirmation() {
 
   const orderId = `ORD-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
   const salePrice = product.price * 0.85;
-  const platformFee = salePrice * 0.1;
-  const net = netProceeds || salePrice - platformFee;
+  const net = netProceeds || salePrice;
 
   const steps: TimelineStep[] = [
     { label: "Item Listed", status: "complete", icon: <Package className="w-4 h-4" /> },
@@ -39,7 +38,7 @@ export default function SaleConfirmation() {
       setOrderDetails({
         orderId,
         salePrice,
-        platformFee,
+        platformFee: 0,
         netProceeds: net,
         giftCardCode: "",
         giftCardAmount: net,
@@ -109,8 +108,6 @@ export default function SaleConfirmation() {
               {[
                 { label: "Item", value: product.name },
                 { label: "Buyer", value: "Anonymous Buyer" },
-                { label: "Sale Price", value: `$${salePrice.toFixed(2)}` },
-                { label: "Platform Fee", value: `-$${platformFee.toFixed(2)}` },
               ].map((item) => (
                 <div key={item.label} className="bg-white/5 rounded-xl p-4">
                   <div className="text-white text-xs mb-1 font-semibold">{item.label}</div>

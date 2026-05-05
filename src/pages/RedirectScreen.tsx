@@ -67,10 +67,14 @@ export default function RedirectScreen() {
     }
   }, [done]);
 
+  const netProceeds = (product.price * 0.85 * 0.9).toFixed(2);
+
   const urlParams = new URLSearchParams({
     corr_id: corrId || "pending",
     product_id: product.id,
     sku: product.sku,
+    net_proceeds: netProceeds,
+    listing_price: netProceeds,
     return_url: window.location.origin + "/sale-confirmation",
     ts: new Date().toISOString(),
   });

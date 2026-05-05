@@ -18,6 +18,8 @@ export default function MarketplaceLogin() {
   const corrId = searchParams.get('corr_id');
   const productId = searchParams.get('product_id');
   const sku = searchParams.get('sku');
+  const netProceeds = searchParams.get('net_proceeds');
+  const listingPrice = searchParams.get('listing_price');
 
   useEffect(() => {
     setCurrentStep(3);
@@ -33,6 +35,8 @@ export default function MarketplaceLogin() {
     if (corrId) params.set('corr_id', corrId);
     if (productId) params.set('product_id', productId);
     if (sku) params.set('sku', sku);
+    if (netProceeds) params.set('net_proceeds', netProceeds);
+    if (listingPrice) params.set('listing_price', listingPrice);
     navigate(`/list-item?${params.toString()}`);
   }
 
@@ -153,6 +157,8 @@ export default function MarketplaceLogin() {
                 if (corrId) params.set('corr_id', corrId);
                 if (productId) params.set('product_id', productId);
                 if (sku) params.set('sku', sku);
+                if (netProceeds) params.set('net_proceeds', netProceeds);
+                if (listingPrice) params.set('listing_price', listingPrice);
                 navigate(`/create-account?${params.toString()}`);
               }}
               className="w-full border border-blue-500/30 text-blue-400 py-2.5 rounded-xl hover:bg-blue-500/10 transition"

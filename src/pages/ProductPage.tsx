@@ -156,7 +156,7 @@ export default function ProductPage() {
                       style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                     >
                       <ShoppingCart className="w-4 h-4" />
-                      Buy Now
+                      Buy Again
                     </button>
                     <button
                       onClick={() => handleResellClick(prod)}

@@ -21,6 +21,8 @@ export default function CreateAccount() {
   const corrId = searchParams.get('corr_id');
   const productId = searchParams.get('product_id');
   const sku = searchParams.get('sku');
+  const netProceeds = searchParams.get('net_proceeds');
+  const listingPrice = searchParams.get('listing_price');
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -44,6 +46,8 @@ export default function CreateAccount() {
     if (corrId) params.set('corr_id', corrId);
     if (productId) params.set('product_id', productId);
     if (sku) params.set('sku', sku);
+    if (netProceeds) params.set('net_proceeds', netProceeds);
+    if (listingPrice) params.set('listing_price', listingPrice);
     navigate(`/list-item?${params.toString()}`);
   }
 

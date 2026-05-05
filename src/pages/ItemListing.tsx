@@ -26,12 +26,24 @@ export default function ItemListing() {
     setExtraPhotos((prev) => prev.filter((_, i) => i !== index));
   }
 
-  // Get corr_id from URL parameters
+  // Get corr_id and listing price from URL parameters
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const urlCorrId = searchParams.get('corr_id');
+    const urlNetProceeds = searchParams.get('net_proceeds');
+    const urlListingPrice = searchParams.get('listing_price');
+    
     if (urlCorrId && !corrId) {
       setCorrId(urlCorrId);
+    }
+    
+    if (urlNetProceeds) {
+      setNetProceeds(parseFloat(urlNetProceeds));
+    }
+    
+    // Set listing price from URL if available
+    if (urlListingPrice) {
+      setPrice(urlListingPrice);
     }
   }, []);
 
@@ -47,11 +59,19 @@ export default function ItemListing() {
       // Use URL parameter corr_id if available
       const searchParams = new URLSearchParams(window.location.search);
       const urlCorrId = searchParams.get('corr_id');
+      const urlNetProceeds = searchParams.get('net_proceeds');
       const finalCorrId = urlCorrId || corrId || "";
       
       const result = await submitListing(finalCorrId, parseFloat(price));
       setListingId(result.listingId);
-      setNetProceeds(parseFloat(price) * 0.765);
+      
+      // Use net proceeds from URL if available, otherwise use the price
+      if (urlNetProceeds) {
+        setNetProceeds(parseFloat(urlNetProceeds));
+      } else {
+        setNetProceeds(parseFloat(price));
+      }
+      
       navigate("/sale-confirmation");
     } finally {
       setLoading(false);
@@ -166,9 +186,6 @@ export default function ItemListing() {
                       alt={product.name}
                       className="w-full h-full object-cover opacity-80"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-blue-500/90 text-white text-[9px] font-bold text-center py-0.5">
-                      MAIN
-                    </div>
                   </div>
 
                   {/* Extra photos */}
@@ -196,9 +213,9 @@ export default function ItemListing() {
 
               {/* Price Section */}
               <div className="border-t border-slate-700 pt-5">
-                <label className="text-sm font-semibold text-white">
+                <label className="text-sm font-semibold text-white flex gap-2 items-center">
                   Listing Price
-                  <span className="ml-2 text-xs text-blue-400">(Editable)</span>
+                  <Lock size={12} className="text-slate-400" />
                 </label>
 
                 <div className="relative mt-2">
@@ -209,17 +226,9 @@ export default function ItemListing() {
                   <input
                     type="number"
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-white font-semibold outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+                    readOnly
+                    className="w-full pl-9 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 font-semibold cursor-not-allowed"
                   />
-                </div>
-
-                {/* Fee + Payout */}
-                <div className="flex justify-between mt-3 text-xs">
-                  <span className="text-slate-400">Platform fee: 23.5%</span>
-                  <span className="text-blue-400 font-semibold">
-                    Est. payout: ${(parseFloat(price || "0") * 0.765).toFixed(2)}
-                  </span>
                 </div>
               </div>
 
