@@ -135,34 +135,8 @@ export default function RedirectScreen() {
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <div className="text-right text-white/30 text-xs mb-8">
+              <div className="text-right text-white/30 text-xs">
                 {Math.round(progress)}%
-              </div>
-
-              {/* Monospace panel */}
-              <div className="bg-black/30 border border-white/5 rounded-xl p-4 text-left">
-                <div
-                  className="text-[10px] text-[#F5A623]/50 tracking-widest mb-3 font-bold"
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                >
-                  REQUEST PARAMS
-                </div>
-                <div className="space-y-1">
-                  {Array.from(urlParams.entries()).map(([k, v]) => (
-                    <div key={k} className="flex gap-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                      <span className="text-[#F5A623]/60 text-[10px] shrink-0">{k}:</span>
-                      <span className="text-white/40 text-[10px] break-all">{v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 pt-3 border-t border-white/5">
-                  <div
-                    className="text-[10px] text-white/20"
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  >
-                    → {REDIRECT_URL}
-                  </div>
-                </div>
               </div>
             </div>
           )}

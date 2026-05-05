@@ -75,7 +75,7 @@ export default function GiftCardScreen() {
           {/* Header */}
           <div className="text-center mb-10">
             <h1
-              className="text-3xl sm:text-4xl font-black text-white mb-3"
+              className="text-3xl sm:text-4xl font-bold text-white mb-3"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
               Your Gift Card is Ready!
@@ -133,7 +133,7 @@ export default function GiftCardScreen() {
                         LUMINARY
                       </div>
                       <div
-                        className="text-white/40 text-[10px] tracking-widest"
+                        className="text-white text-[10px] tracking-widest font-semibold"
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}
                       >
                         RESALE GIFT CARD
@@ -145,25 +145,21 @@ export default function GiftCardScreen() {
                   </div>
 
                   <div className="mb-6">
-                    <div className="text-white/40 text-[10px] tracking-widest mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    <div className="text-white text-[10px] tracking-widest mb-1 font-semibold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                       VALUE
                     </div>
-                    <div
-                      className="text-4xl font-black text-white"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      ${amount.toFixed(2)}
+                    <div className="text-3xl font-bold text-white">
+                      ${amount.toFixed(2)} USD
                     </div>
-                    <div className="text-white/30 text-xs mt-0.5">USD</div>
                   </div>
 
                   <div className="flex items-end justify-between">
                     <div>
-                      <div className="text-white/30 text-[10px] tracking-widest mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                      <div className="text-white text-[10px] tracking-widest mb-1 font-semibold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                         CARD NUMBER
                       </div>
                       <div
-                        className="text-white text-lg font-bold tracking-widest"
+                        className="text-white text-lg font-semibold tracking-widest"
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}
                       >
                         {giftCardData?.code || "-- ---- ----"}
@@ -186,7 +182,7 @@ export default function GiftCardScreen() {
           {giftCardData && !loading && (
             <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 mb-6 shadow-xl">
               <h2
-                className="text-xs font-semibold text-white/40 tracking-widest uppercase mb-4"
+                className="text-xs font-semibold text-white tracking-widest uppercase mb-4"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 Card Details
@@ -198,13 +194,13 @@ export default function GiftCardScreen() {
                   { icon: <Calendar className="w-4 h-4" />, label: "Valid Until", value: giftCardData.expiryDate },
                   { icon: <ShoppingBag className="w-4 h-4" />, label: "Redeemable At", value: "Any LUMINARY Retailer" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-                    <div className="flex items-center gap-2 text-white/40">
+                  <div key={item.label} className="flex items-center justify-between py-3 px-4 bg-white/5 rounded-lg border border-white/5">
+                    <div className="flex items-center gap-2 text-white">
                       {item.icon}
-                      <span className="text-sm">{item.label}</span>
+                      <span className="text-sm font-semibold">{item.label}</span>
                     </div>
                     <span
-                      className="text-white text-sm font-medium"
+                      className="text-white text-sm font-semibold"
                       style={item.label === "Card Number" || item.label === "PIN" ? { fontFamily: "'JetBrains Mono', monospace" } : {}}
                     >
                       {item.value}
@@ -218,7 +214,7 @@ export default function GiftCardScreen() {
           {/* Stepper Timeline */}
           <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 mb-8 shadow-xl">
             <h2
-              className="text-xs font-semibold text-white/40 tracking-widest uppercase mb-5"
+              className="text-xs font-semibold text-white tracking-widest uppercase mb-5"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
               Transaction Complete

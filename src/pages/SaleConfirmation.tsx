@@ -78,7 +78,7 @@ export default function SaleConfirmation() {
               <CheckCircle2 className="w-10 h-10 text-green-400" />
             </div>
             <h1
-              className="text-3xl sm:text-4xl font-black text-white mb-3"
+              className="text-3xl sm:text-4xl font-bold text-white mb-3"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
               Sale Confirmed!
@@ -92,7 +92,7 @@ export default function SaleConfirmation() {
           <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 md:p-8 mb-6 shadow-xl ring-1 ring-green-400/10">
             <div className="flex items-center justify-between mb-5">
               <h2
-                className="text-sm font-semibold text-white/60 tracking-widest uppercase"
+                className="text-sm font-semibold text-white tracking-widest uppercase"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 Order Summary
@@ -113,7 +113,7 @@ export default function SaleConfirmation() {
                 { label: "Platform Fee", value: `-$${platformFee.toFixed(2)}` },
               ].map((item) => (
                 <div key={item.label} className="bg-white/5 rounded-xl p-4">
-                  <div className="text-white/40 text-xs mb-1">{item.label}</div>
+                  <div className="text-white text-xs mb-1 font-semibold">{item.label}</div>
                   <div className="text-white text-sm font-semibold truncate">{item.value}</div>
                 </div>
               ))}
@@ -122,16 +122,13 @@ export default function SaleConfirmation() {
             {/* Net Proceeds */}
             <div className="bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-xl p-4 flex items-center justify-between">
               <div>
-                <div className="text-[#F5A623]/60 text-xs mb-0.5">Net Proceeds</div>
-                <div
-                  className="text-[#F5A623] text-2xl font-black"
-                  style={{ fontFamily: "'Syne', sans-serif" }}
-                >
+                <div className="text-[#F5A623] text-xs mb-1 font-semibold">Net Proceeds</div>
+                <div className="text-[#F5A623] text-xl font-bold">
                   ${net.toFixed(2)}
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-white/40 text-xs mb-0.5">Paid via</div>
+                <div className="text-white text-xs mb-1 font-semibold">Paid via</div>
                 <div className="text-white text-sm font-semibold">Gift Card</div>
               </div>
             </div>
@@ -140,7 +137,7 @@ export default function SaleConfirmation() {
           {/* Stepper Timeline */}
           <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 mb-8 shadow-xl">
             <h2
-              className="text-xs font-semibold text-white/40 tracking-widest uppercase mb-5"
+              className="text-xs font-semibold text-white tracking-widest uppercase mb-5"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
               Processing Status
