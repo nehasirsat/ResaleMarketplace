@@ -27,6 +27,16 @@ export default function SaleConfirmation() {
     setCurrentStep(5);
     const t = setTimeout(() => setVisible(true), 50);
     const step4T = setTimeout(() => setStep4Done(true), 2000);
+    
+    // Notify brand site that sale is complete (for cross-tab communication)
+    if (window.opener) {
+      window.opener.postMessage({
+        type: 'SALE_COMPLETED',
+        corrId: corrId,
+        netProceeds: net
+      }, window.location.origin);
+    }
+    
     return () => {
       clearTimeout(t);
       clearTimeout(step4T);

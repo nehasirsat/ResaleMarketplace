@@ -60,8 +60,12 @@ export default function RedirectScreen() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       const t = setTimeout(() => {
         setCurrentStep(3);
-        // Navigate to marketplace login with URL parameters
-        navigate(`/marketplace-login?${urlParams.toString()}`);
+        // Open marketplace in new tab
+        const marketplaceUrl = `/marketplace-login?${urlParams.toString()}`;
+        window.open(marketplaceUrl, '_blank');
+        
+        // Navigate to status page on brand site
+        navigate(`/sale-status?corr_id=${corrId}`);
       }, 400);
       return () => clearTimeout(t);
     }
