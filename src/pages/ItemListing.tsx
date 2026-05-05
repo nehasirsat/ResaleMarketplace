@@ -79,10 +79,10 @@ export default function ItemListing() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-slate-800 text-white">
 
-      {/* Background - Different gradient */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950" />
+      {/* Background - Lighter gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900" />
       <div
         className="fixed inset-0 pointer-events-none opacity-5"
         style={{
@@ -92,7 +92,7 @@ export default function ItemListing() {
       />
 
       {/* Header - Marketplace branding */}
-      <div className="relative z-10 px-6 py-4 border-b border-white/10 bg-slate-800/50 backdrop-blur-sm">
+      <div className="relative z-10 px-6 py-4 border-b border-white/10 bg-slate-700/50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -113,7 +113,7 @@ export default function ItemListing() {
           {/* Header */}
           <div className="mb-8">
             <h1
-              className="text-3xl font-black tracking-tight"
+              className="text-3xl font-bold tracking-tight"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
               Create Listing
@@ -139,7 +139,7 @@ export default function ItemListing() {
           <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* Card */}
-            <div className="bg-slate-800/80 backdrop-blur border border-slate-700/50 rounded-2xl p-6 space-y-6 shadow-xl shadow-black/50">
+            <div className="bg-slate-700/80 backdrop-blur border border-slate-600/50 rounded-2xl p-6 space-y-6 shadow-xl shadow-black/50">
 
               {/* Section Title */}
               <div className="text-xs text-slate-500 uppercase tracking-widest">

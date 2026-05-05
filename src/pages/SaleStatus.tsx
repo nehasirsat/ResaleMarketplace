@@ -5,9 +5,10 @@ import { CheckCircle2, Clock, ExternalLink } from "lucide-react";
 
 export default function SaleStatus() {
   const navigate = useNavigate();
-  const { setCurrentStep, giftCardData } = useResale();
+  const { setCurrentStep, giftCardData, setGiftCardData, setNetProceeds } = useResale();
   const [checking, setChecking] = useState(true);
   const [saleCompleted, setSaleCompleted] = useState(false);
+  const [receivedGiftCardData, setReceivedGiftCardData] = useState<any>(null);
 
   // Get corr_id from URL
   const searchParams = new URLSearchParams(window.location.search);
@@ -25,6 +26,15 @@ export default function SaleStatus() {
       if (event.origin !== window.location.origin) return;
       
       if (event.data.type === 'SALE_COMPLETED' && event.data.corrId === corrId) {
+        setSaleCompleted(true);
+        setChecking(false);
+      }
+      
+      // Listen for gift card data
+      if (event.data.type === 'GIFT_CARD_ISSUED' && event.data.corrId === corrId) {
+        setReceivedGiftCardData(event.data.giftCardData);
+        setGiftCardData(event.data.giftCardData);
+        setNetProceeds(event.data.netProceeds);
         setSaleCompleted(true);
         setChecking(false);
       }
@@ -51,7 +61,7 @@ export default function SaleStatus() {
   }, [corrId]);
 
   function handleViewGiftCard() {
-    // In production, fetch gift card data by corr_id before navigating
+    // Gift card data is already in context from postMessage
     navigate("/giftcard");
   }
 

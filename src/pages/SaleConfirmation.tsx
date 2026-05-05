@@ -63,6 +63,17 @@ export default function SaleConfirmation() {
     try {
       const data = await issueGiftCard(orderId, net);
       setGiftCardData(data);
+      
+      // Send gift card data to brand site (opener window)
+      if (window.opener) {
+        window.opener.postMessage({
+          type: 'GIFT_CARD_ISSUED',
+          corrId: corrId,
+          giftCardData: data,
+          netProceeds: net
+        }, window.location.origin);
+      }
+      
       setCurrentStep(6);
       navigate("/giftcard");
     } catch {
@@ -74,10 +85,17 @@ export default function SaleConfirmation() {
 
   return (
     <div
-      className={`min-h-screen bg-[#0A1931] transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`min-h-screen bg-slate-800 transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
     >
 
-      <div className="fixed inset-0 bg-gradient-to-br from-[#0A1931] via-[#0d1f3c] to-[#060f1f] pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 pointer-events-none" />
+      <div
+        className="fixed inset-0 pointer-events-none opacity-5"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 30% 40%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 70% 60%, #8b5cf6 0%, transparent 40%)",
+        }}
+      />
 
       <div className="relative z-10 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
@@ -98,7 +116,7 @@ export default function SaleConfirmation() {
           </div>
 
           {/* Order Summary Grid */}
-          <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 md:p-8 mb-6 shadow-xl ring-1 ring-green-400/10">
+          <div className="bg-slate-700/80 border border-slate-600/50 rounded-2xl p-6 md:p-8 mb-6 shadow-xl ring-1 ring-blue-400/10">
             <div className="flex items-center justify-between mb-5">
               <h2
                 className="text-sm font-semibold text-white tracking-widest uppercase"
@@ -127,10 +145,10 @@ export default function SaleConfirmation() {
             </div>
 
             {/* Net Proceeds */}
-            <div className="bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-xl p-4 flex items-center justify-between">
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
               <div>
-                <div className="text-[#F5A623] text-xs mb-1 font-semibold">Net Proceeds</div>
-                <div className="text-[#F5A623] text-xl font-bold">
+                <div className="text-blue-400 text-xs mb-1 font-semibold">Net Proceeds</div>
+                <div className="text-blue-400 text-xl font-bold">
                   ${net.toFixed(2)}
                 </div>
               </div>
@@ -142,7 +160,7 @@ export default function SaleConfirmation() {
           </div>
 
           {/* Stepper Timeline */}
-          <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 mb-8 shadow-xl">
+          <div className="bg-slate-700/80 border border-slate-600/50 rounded-2xl p-6 mb-8 shadow-xl">
             <h2
               className="text-xs font-semibold text-white tracking-widest uppercase mb-5"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
@@ -160,12 +178,12 @@ export default function SaleConfirmation() {
               <button
                 onClick={handleViewGiftCard}
                 disabled={giftCardLoading}
-                className="w-full flex items-center justify-center gap-2 bg-[#F5A623] hover:bg-[#e8961a] disabled:opacity-60 rounded-xl py-4 text-[#0A1931] font-bold text-lg transition-all duration-200 shadow-lg shadow-[#F5A623]/20 hover:shadow-[#F5A623]/30"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:opacity-60 rounded-xl py-4 text-white font-bold text-lg transition-all duration-200 shadow-lg shadow-blue-500/20"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {giftCardLoading ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-[#0A1931]/30 border-t-[#0A1931] rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     Issuing Gift Card...
                   </>
                 ) : (
@@ -181,7 +199,7 @@ export default function SaleConfirmation() {
 
           {!step4Done && (
             <div className="text-center text-white/30 text-sm flex items-center justify-center gap-2">
-              <div className="w-3 h-3 border border-white/20 border-t-[#F5A623]/50 rounded-full animate-spin" />
+              <div className="w-3 h-3 border border-white/20 border-t-blue-400/50 rounded-full animate-spin" />
               Processing your gift card...
             </div>
           )}

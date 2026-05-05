@@ -242,7 +242,7 @@ export default function ProductPage() {
                 </div>
                 <div>
                   <h2
-                    className="text-xl font-black text-white leading-tight"
+                    className="text-xl font-bold text-white leading-tight"
                     style={{ fontFamily: "'Syne', sans-serif" }}
                   >
                     Resell for a Gift Card

@@ -101,7 +101,7 @@ export default function RedirectScreen() {
                 <AlertTriangle className="w-8 h-8 text-red-400" />
               </div>
               <h2
-                className="text-2xl font-black text-white mb-2"
+                className="text-2xl font-bold text-white mb-2"
                 style={{ fontFamily: "'Syne', sans-serif" }}
               >
                 Connection Timeout
@@ -130,7 +130,7 @@ export default function RedirectScreen() {
               </div>
 
               <h2
-                className="text-2xl sm:text-3xl font-black text-white mb-2"
+                className="text-2xl sm:text-3xl font-bold text-white mb-2"
                 style={{ fontFamily: "'Syne', sans-serif" }}
               >
                 Redirecting Securely
