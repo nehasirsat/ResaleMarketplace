@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
 import { submitListing } from "@/lib/mockApi";
-import { Shield, Lock, DollarSign, ImageIcon } from "lucide-react";
+import { Shield, Lock, DollarSign, ImageIcon, Plus, X } from "lucide-react";
 
 export default function ItemListing() {
   const navigate = useNavigate();
@@ -10,6 +10,21 @@ export default function ItemListing() {
 
   const [price, setPrice] = useState(product.price.toString());
   const [loading, setLoading] = useState(false);
+  const [extraPhotos, setExtraPhotos] = useState<string[]>([]);
+
+  function handleAddPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      const url = URL.createObjectURL(file);
+      setExtraPhotos((prev) => [...prev, url]);
+    });
+    e.target.value = "";
+  }
+
+  function handleRemovePhoto(index: number) {
+    setExtraPhotos((prev) => prev.filter((_, i) => i !== index));
+  }
 
   // Get corr_id from URL parameters
   useEffect(() => {
@@ -143,30 +158,39 @@ export default function ItemListing() {
                   Photos <Lock size={12} />
                 </label>
 
-                <div className="flex gap-3">
-                  {[
-                    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=60",
-                    "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=200&q=60",
-                    "https://images.unsplash.com/photo-1594534475808-b18fc33b045e?w=200&q=60",
-                  ].map((src, i) => (
-                    <div
-                      key={i}
-                      className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-700 bg-slate-900/50"
-                    >
-                      <img
-                        src={src}
-                        alt=""
-                        className="w-full h-full object-cover opacity-80"
-                      />
+                <div className="flex gap-3 flex-wrap">
+                  {/* Main image - locked */}
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-700 bg-slate-900/50">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover opacity-80"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-blue-500/90 text-white text-[9px] font-bold text-center py-0.5">
+                      MAIN
+                    </div>
+                  </div>
 
-                      {/* MAIN TAG */}
-                      {i === 0 && (
-                        <div className="absolute bottom-0 left-0 right-0 bg-blue-500/90 text-white text-[9px] font-bold text-center py-0.5">
-                          MAIN
-                        </div>
-                      )}
+                  {/* Extra photos */}
+                  {extraPhotos.map((src, i) => (
+                    <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-700 bg-slate-900/50 group">
+                      <img src={src} alt="" className="w-full h-full object-cover opacity-80" />
+                      <button
+                        type="button"
+                        onClick={() => handleRemovePhoto(i)}
+                        className="absolute top-1 right-1 w-4 h-4 bg-black/70 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-2.5 h-2.5 text-white" />
+                      </button>
                     </div>
                   ))}
+
+                  {/* Add photo button */}
+                  <label className="w-20 h-20 rounded-lg border border-dashed border-slate-600 bg-slate-900/30 hover:border-blue-500/50 hover:bg-blue-500/5 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors">
+                    <Plus className="w-5 h-5 text-slate-500" />
+                    <span className="text-[9px] text-slate-500">Add Photo</span>
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleAddPhoto} />
+                  </label>
                 </div>
               </div>
 
