@@ -92,7 +92,7 @@ export default function ProductPage() {
               <Star className="w-3 h-3 text-[#F5A623] fill-[#F5A623]" />
             </div>
             <h1
-              className="text-4xl sm:text-5xl font-black text-white tracking-tight"
+              className="text-4xl sm:text-5xl font-bold text-white tracking-tight"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
               LUMINARY
@@ -115,22 +115,6 @@ export default function ProductPage() {
                     className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/60 via-transparent to-transparent" />
-                  {/* EON Badge */}
-                  <div className="absolute bottom-3 right-3">
-                    <div className="bg-[#0A1931]/90 backdrop-blur-sm border border-[#F5A623]/30 rounded-lg px-2 py-1.5 shadow-lg">
-                      <div className="flex items-center gap-1.5">
-                        <Shield className="w-3 h-3 text-[#F5A623]" />
-                        <div>
-                          <div
-                            className="text-[9px] text-[#F5A623] font-bold tracking-widest"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          >
-                            EON CERTIFIED
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Info */}
@@ -147,7 +131,7 @@ export default function ProductPage() {
                   </div>
 
                   <h2
-                    className="text-xl font-black text-white mb-2 leading-tight"
+                    className="text-xl font-bold text-white mb-2 leading-tight"
                     style={{ fontFamily: "'Syne', sans-serif" }}
                   >
                     {prod.name}
@@ -159,13 +143,9 @@ export default function ProductPage() {
 
                   {/* Price */}
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span
-                      className="text-2xl font-black text-white"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      ${prod.price.toLocaleString()}
+                    <span className="text-2xl font-semibold text-white tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                      ${prod.price.toLocaleString()} USD
                     </span>
-                    <span className="text-white/40 text-sm">USD</span>
                   </div>
 
                   {/* Actions */}

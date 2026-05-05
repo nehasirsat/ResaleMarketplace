@@ -6,10 +6,19 @@ import { Shield, Lock, DollarSign, ImageIcon } from "lucide-react";
 
 export default function ItemListing() {
   const navigate = useNavigate();
-  const { product, corrId, setCurrentStep, setListingId, setNetProceeds } = useResale();
+  const { product, corrId, setCurrentStep, setListingId, setNetProceeds, setCorrId } = useResale();
 
   const [price, setPrice] = useState(product.price.toString());
   const [loading, setLoading] = useState(false);
+
+  // Get corr_id from URL parameters
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const urlCorrId = searchParams.get('corr_id');
+    if (urlCorrId && !corrId) {
+      setCorrId(urlCorrId);
+    }
+  }, []);
 
   useEffect(() => {
     setCurrentStep(4);
@@ -20,7 +29,12 @@ export default function ItemListing() {
     setLoading(true);
 
     try {
-      const result = await submitListing(corrId || "", parseFloat(price));
+      // Use URL parameter corr_id if available
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlCorrId = searchParams.get('corr_id');
+      const finalCorrId = urlCorrId || corrId || "";
+      
+      const result = await submitListing(finalCorrId, parseFloat(price));
       setListingId(result.listingId);
       setNetProceeds(parseFloat(price) * 0.765);
       navigate("/sale-confirmation");

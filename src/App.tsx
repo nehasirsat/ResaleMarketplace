@@ -4,6 +4,7 @@ import { ResaleProvider } from "@/context/ResaleContext";
 import ProductPage from "@/pages/ProductPage";
 import RedirectScreen from "@/pages/RedirectScreen";
 import MarketplaceLogin from "@/pages/MarketplaceLogin";
+import CreateAccount from "@/pages/CreateAccount";
 import ItemListing from "@/pages/ItemListing";
 import SaleConfirmation from "@/pages/SaleConfirmation";
 import GiftCardScreen from "@/pages/GiftCardScreen";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<ProductPage />} />
           <Route path="/redirect" element={<RedirectScreen />} />
           <Route path="/marketplace-login" element={<MarketplaceLogin />} />
+          <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/list-item" element={<ItemListing />} />
           <Route path="/sale-confirmation" element={<SaleConfirmation />} />
           <Route path="/giftcard" element={<GiftCardScreen />} />
