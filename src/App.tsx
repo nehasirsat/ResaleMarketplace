@@ -10,6 +10,8 @@ import SaleConfirmation from "@/pages/SaleConfirmation";
 import GiftCardScreen from "@/pages/GiftCardScreen";
 import SaleStatus from "@/pages/SaleStatus";
 
+import MarketplaceHome from "@/pages/MarketplaceHome";
+
 function App() {
   return (
     <Suspense
@@ -21,10 +23,11 @@ function App() {
     >
       <ResaleProvider>
         <Routes>
-          <Route path="/" element={<ProductPage />} />
+          <Route path="/" element={<MarketplaceHome />} />
+          <Route path="/marketplace-login" element={<MarketplaceLogin />} />
+          <Route path="/past-orders" element={<ProductPage />} />
           <Route path="/redirect" element={<RedirectScreen />} />
           <Route path="/sale-status" element={<SaleStatus />} />
-          <Route path="/marketplace-login" element={<MarketplaceLogin />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/list-item" element={<ItemListing />} />
           <Route path="/sale-confirmation" element={<SaleConfirmation />} />

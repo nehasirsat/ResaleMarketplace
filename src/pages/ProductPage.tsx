@@ -79,17 +79,26 @@ export default function ProductPage() {
         }}
       />
 
-      <div className="relative z-10 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 pt-0 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Home icon
-          <div className="flex justify-end mb-2">
-            <button
-              onClick={() => navigate("/marketplace-home")}
-              className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition text-white/60 hover:text-white"
+
+          {/* Shared Header */}
+          <header className="flex justify-between items-center py-4 mb-8 border-b border-white/10">
+            <div
+              className="text-xl font-black tracking-tight text-white"
+              style={{ fontFamily: "'Syne', sans-serif" }}
             >
-              <Home className="w-4 h-4" />
-            </button>
-          </div> */}
+              LUMINARY
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => navigate("/marketplace-home")}
+                className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition text-white/60 hover:text-white"
+              >
+                <Home className="w-4 h-4" />
+              </button>
+            </div>
+          </header>
           {/* Brand header */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-full px-4 py-1.5 mb-6">
