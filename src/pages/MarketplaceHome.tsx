@@ -115,7 +115,7 @@ export default function MarketplaceHome() {
       <div className="fixed inset-0 bg-gradient-to-br from-[#0A1931] via-[#0d1f3c] to-[#060f1f] pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-10 px-6 py-4 border-b border-white/10 bg-[#0A1931]/80 backdrop-blur-sm sticky top-0">
+      <header className="relative z-50 px-6 py-4 border-b border-white/10 bg-[#0A1931]/80 backdrop-blur-sm sticky top-0">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div
             className="text-xl font-black tracking-tight"
@@ -136,14 +136,6 @@ export default function MarketplaceHome() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {/* Gift Cards button */}
-            <button
-              onClick={() => navigate("/giftcard")}
-              className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#F5A623]/30 text-white/70 hover:text-white text-sm font-medium px-4 py-2 rounded-full transition"
-            >
-              <Gift className="w-4 h-4 text-[#F5A623]" />
-              Gift Cards
-            </button>
 
             {/* User menu */}
             <div className="relative" ref={dropdownRef}>
@@ -157,13 +149,20 @@ export default function MarketplaceHome() {
               </button>
 
               {open && (
-                <div className="absolute right-0 mt-2 w-48 bg-[#0d1f3c] border border-white/10 rounded-xl shadow-xl shadow-black/40 overflow-hidden z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-[#0d1f3c] border border-white/10 rounded-xl shadow-xl shadow-black/40 z-[100]">
                   <button
                     onClick={() => { setOpen(false); navigate("/past-orders"); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition"
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition"
                   >
-                    <ShoppingBag className="w-4 h-4 text-[#F5A623]" />
-                    My Orders
+                    <ShoppingBag className="w-4 h-4 text-[#F5A623] pointer-events-none" />
+                    <span className="pointer-events-none">My Orders</span>
+                  </button>
+                  <button
+                    onClick={() => navigate("/giftcard")}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition"
+                  >
+                    <Gift className="w-4 h-4 text-[#F5A623] pointer-events-none" />
+                    Gift Cards
                   </button>
                 </div>
               )}
