@@ -36,7 +36,7 @@ export default function ListingPending() {
 
   function handleCheckStatus() {
     setChecking(true);
-    setTimeout(() => navigate("/sale-confirmation"), 1200);
+    setTimeout(() => navigate("/marketplace/sale-confirmation"), 1200);
   }
 
   return (

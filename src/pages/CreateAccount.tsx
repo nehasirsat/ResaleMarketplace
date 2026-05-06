@@ -48,7 +48,7 @@ export default function CreateAccount() {
     if (sku) params.set('sku', sku);
     if (netProceeds) params.set('net_proceeds', netProceeds);
     if (listingPrice) params.set('listing_price', listingPrice);
-    navigate(`/list-item?${params.toString()}`);
+    navigate(`/marketplace/list-item?${params.toString()}`);
   }
 
   return (

@@ -24,16 +24,19 @@ function App() {
     >
       <ResaleProvider>
         <Routes>
+          {/* Brand-side routes */}
           <Route path="/" element={<MarketplaceHome />} />
           <Route path="/marketplace-login" element={<MarketplaceLogin />} />
-          <Route path="/past-orders" element={<ProductPage />} />
+          <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/redirect" element={<RedirectScreen />} />
           <Route path="/sale-status" element={<SaleStatus />} />
-          <Route path="/create-account" element={<CreateAccount />} />
-          <Route path="/list-item" element={<ItemListing />} />
-          <Route path="/sale-confirmation" element={<SaleConfirmation />} />
-          <Route path="/listing-pending" element={<ListingPending />} />
           <Route path="/giftcard" element={<GiftCardScreen />} />
+          <Route path="/past-orders" element={<ProductPage />} />
+
+          {/* Marketplace-side routes (post-login) */}
+          <Route path="/marketplace/list-item" element={<ItemListing />} />
+          <Route path="/marketplace/listing-pending" element={<ListingPending />} />
+          <Route path="/marketplace/sale-confirmation" element={<SaleConfirmation />} />
         </Routes>
       </ResaleProvider>
     </Suspense>

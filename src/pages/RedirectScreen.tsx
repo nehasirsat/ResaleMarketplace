@@ -79,7 +79,7 @@ export default function RedirectScreen() {
     sku: product.sku,
     net_proceeds: netProceeds,
     listing_price: netProceeds,
-    return_url: window.location.origin + "/sale-confirmation",
+    return_url: window.location.origin + "/marketplace/sale-confirmation",
     ts: new Date().toISOString(),
   });
 

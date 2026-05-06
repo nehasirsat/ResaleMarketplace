@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
-import { issueGiftCard } from "@/lib/mockApi";
 import StepperTimeline, { TimelineStep } from "@/components/StepperTimeline";
-import { CheckCircle2, Package, Tag, CreditCard, Gift, ArrowRight } from "lucide-react";
+import { CheckCircle2, Package, Tag, CreditCard, Gift, ArrowRight, ExternalLink } from "lucide-react";
 
 export default function SaleConfirmation() {
   const navigate = useNavigate();
   const { product, netProceeds, corrId, listingId, setCurrentStep, setGiftCardData, setOrderDetails } = useResale();
   const [visible, setVisible] = useState(false);
   const [step4Done, setStep4Done] = useState(false);
-  const [giftCardLoading, setGiftCardLoading] = useState(false);
 
   const orderId = `ORD-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
   const salePrice = product.price * 0.85;
@@ -58,29 +56,10 @@ export default function SaleConfirmation() {
     }
   }, []);
 
-  async function handleViewGiftCard() {
-    setGiftCardLoading(true);
-    try {
-      const data = await issueGiftCard(orderId, net);
-      setGiftCardData(data);
-      
-      // Send gift card data to brand site (opener window)
-      if (window.opener) {
-        window.opener.postMessage({
-          type: 'GIFT_CARD_ISSUED',
-          corrId: corrId,
-          giftCardData: data,
-          netProceeds: net
-        }, window.location.origin);
-      }
-      
-      setCurrentStep(6);
-      navigate("/giftcard");
-    } catch {
-      // Navigation will handle retry
-    } finally {
-      setGiftCardLoading(false);
-    }
+  function handleReturnToBrand() {
+    // Redirect back to brand page where the gift card will be shown
+    // In production this would be the actual brand URL with corrId
+    navigate(`/giftcard${corrId ? `?corr_id=${corrId}` : ""}`);
   }
 
   return (
@@ -170,29 +149,22 @@ export default function SaleConfirmation() {
             <StepperTimeline steps={steps} />
           </div>
 
-          {/* Gift Card CTA */}
+          {/* Return to Brand CTA */}
           {step4Done && (
-            <div
-              className="animate-in fade-in slide-in-from-bottom-4 duration-500"
-            >
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-xl p-4 mb-4 text-center">
+                <p className="text-white/60 text-sm">
+                  Your gift card is being issued by <span className="text-[#F5A623] font-semibold">LUMINARY</span>. Return to the brand page to view it.
+                </p>
+              </div>
               <button
-                onClick={handleViewGiftCard}
-                disabled={giftCardLoading}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:opacity-60 rounded-xl py-4 text-white font-bold text-lg transition-all duration-200 shadow-lg shadow-blue-500/20"
+                onClick={handleReturnToBrand}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#F5A623] to-[#e8961a] hover:from-[#e8961a] hover:to-[#d4851a] rounded-xl py-4 text-[#0A1931] font-bold text-lg transition-all duration-200 shadow-lg shadow-[#F5A623]/20"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
-                {giftCardLoading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Issuing Gift Card...
-                  </>
-                ) : (
-                  <>
-                    <Gift className="w-5 h-5" />
-                    View Gift Card
-                    <ArrowRight className="w-5 h-5" />
-                  </>
-                )}
+                <ExternalLink className="w-5 h-5" />
+                Return to Brand Page
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           )}
