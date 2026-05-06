@@ -1,44 +1,52 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
-import StepperTimeline, { TimelineStep } from "@/components/StepperTimeline";
+import StepperTimeline, { TimelineStep, StepStatus } from "@/components/StepperTimeline";
 import { CheckCircle2, Package, Tag, CreditCard, Gift, ArrowRight, ExternalLink } from "lucide-react";
 
 export default function SaleConfirmation() {
   const navigate = useNavigate();
-  const { product, netProceeds, corrId, listingId, setCurrentStep, setGiftCardData, setOrderDetails } = useResale();
+  const { product, netProceeds, corrId, setCurrentStep, setOrderDetails } = useResale();
   const [visible, setVisible] = useState(false);
-  const [step4Done, setStep4Done] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [allDone, setAllDone] = useState(false);
+  const orderId = useRef(`ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`).current;
 
-  const orderId = `ORD-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
   const salePrice = product.price * 0.85;
   const net = netProceeds || salePrice;
 
-  const steps: TimelineStep[] = [
-    { label: "Item Listed", status: "complete", icon: <Package className="w-4 h-4" /> },
-    { label: "Sale Confirmed", status: "complete", icon: <Tag className="w-4 h-4" /> },
-    { label: "Payment Processed", status: "complete", icon: <CreditCard className="w-4 h-4" /> },
-    { label: "Gift Card Issued", status: step4Done ? "complete" : "active", icon: <Gift className="w-4 h-4" /> },
+  // Build steps dynamically based on activeStep
+  const stepDefs = [
+    { label: "Item Listed",       icon: <Package  className="w-4 h-4" /> },
+    { label: "Sale Confirmed",    icon: <Tag      className="w-4 h-4" /> },
+    { label: "Payment Processed", icon: <CreditCard className="w-4 h-4" /> },
+    { label: "Gift Card Issued",  icon: <Gift     className="w-4 h-4" /> },
   ];
+
+  const steps: TimelineStep[] = stepDefs.map((s, i) => ({
+    ...s,
+    status: (i < activeStep ? "complete" : i === activeStep ? "active" : "pending") as StepStatus,
+  }));
 
   useEffect(() => {
     setCurrentStep(5);
     const t = setTimeout(() => setVisible(true), 50);
-    const step4T = setTimeout(() => setStep4Done(true), 2000);
-    
-    // Notify brand site that sale is complete (for cross-tab communication)
+
+    // Step through each step with 800ms hold, then advance
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    timers.push(setTimeout(() => setActiveStep(1), 800));   // step 1 active
+    timers.push(setTimeout(() => setActiveStep(2), 1600));  // step 2 active — show order summary
+    timers.push(setTimeout(() => setActiveStep(3), 2400));  // step 3 active
+    timers.push(setTimeout(() => {
+      setActiveStep(4);
+      setAllDone(true);
+    }, 3200));
+
     if (window.opener) {
-      window.opener.postMessage({
-        type: 'SALE_COMPLETED',
-        corrId: corrId,
-        netProceeds: net
-      }, window.location.origin);
+      window.opener.postMessage({ type: 'SALE_COMPLETED', corrId, netProceeds: net }, window.location.origin);
     }
-    
-    return () => {
-      clearTimeout(t);
-      clearTimeout(step4T);
-    };
+
+    return () => { clearTimeout(t); timers.forEach(clearTimeout); };
   }, []);
 
   useEffect(() => {
@@ -56,10 +64,13 @@ export default function SaleConfirmation() {
     }
   }, []);
 
+  // corrId from URL or context
+  const urlCorrId = new URLSearchParams(window.location.search).get('corr_id');
+  const finalCorrId = urlCorrId || corrId;
+
   function handleReturnToBrand() {
-    // Redirect back to brand page where the gift card will be shown
-    // In production this would be the actual brand URL with corrId
-    navigate(`/giftcard${corrId ? `?corr_id=${corrId}` : ""}`);
+    // Go directly to gift card page, passing net proceeds via URL
+    navigate(`/giftcard?corr_id=${finalCorrId}&net_proceeds=${net.toFixed(2)}`);
   }
 
   return (
@@ -77,69 +88,10 @@ export default function SaleConfirmation() {
       />
 
       <div className="relative z-10 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto">
-          {/* Success Header */}
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-500/10 border-2 border-green-500/30 mb-6 shadow-lg shadow-green-500/10 animate-bounce">
-              <CheckCircle2 className="w-10 h-10 text-green-400" />
-            </div>
-            <h1
-              className="text-3xl sm:text-4xl font-bold text-white mb-3"
-              style={{ fontFamily: "'Syne', sans-serif" }}
-            >
-              Sale Confirmed!
-            </h1>
-            <p className="text-white/50 text-base">
-              Your item has been sold and payment is being processed.
-            </p>
-          </div>
+        <div className="max-w-2xl mx-auto space-y-6">
 
-          {/* Order Summary Grid */}
-          <div className="bg-slate-700/80 border border-slate-600/50 rounded-2xl p-6 md:p-8 mb-6 shadow-xl ring-1 ring-blue-400/10">
-            <div className="flex items-center justify-between mb-5">
-              <h2
-                className="text-sm font-semibold text-white tracking-widest uppercase"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                Order Summary
-              </h2>
-              <span
-                className="text-[10px] text-green-400/70 tracking-widest"
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              >
-                {orderId}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              {[
-                { label: "Item", value: product.name },
-                { label: "Buyer", value: "Anonymous Buyer" },
-              ].map((item) => (
-                <div key={item.label} className="bg-white/5 rounded-xl p-4">
-                  <div className="text-white text-xs mb-1 font-semibold">{item.label}</div>
-                  <div className="text-white text-sm font-semibold truncate">{item.value}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Net Proceeds */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
-              <div>
-                <div className="text-blue-400 text-xs mb-1 font-semibold">Net Proceeds</div>
-                <div className="text-blue-400 text-xl font-bold">
-                  ${net.toFixed(2)}
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-white text-xs mb-1 font-semibold">Paid via</div>
-                <div className="text-white text-sm font-semibold">Gift Card</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Stepper Timeline */}
-          <div className="bg-slate-700/80 border border-slate-600/50 rounded-2xl p-6 mb-8 shadow-xl">
+          {/* Processing Status — always visible first */}
+          <div className="bg-slate-700/80 border border-slate-600/50 rounded-2xl p-6 shadow-xl">
             <h2
               className="text-xs font-semibold text-white tracking-widest uppercase mb-5"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
@@ -149,32 +101,79 @@ export default function SaleConfirmation() {
             <StepperTimeline steps={steps} />
           </div>
 
-          {/* Return to Brand CTA */}
-          {step4Done && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-xl p-4 mb-4 text-center">
-                <p className="text-white/60 text-sm">
-                  Your gift card is being issued by <span className="text-[#F5A623] font-semibold">LUMINARY</span>. Return to the brand page to view it.
-                </p>
+          {/* Order summary — appears when Sale Confirmed step hits (step >= 2) */}
+          <div className={`transition-all duration-500 ${activeStep >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/10 border-2 border-green-500/30 mb-3 shadow-lg shadow-green-500/10">
+                <CheckCircle2 className="w-8 h-8 text-green-400" />
               </div>
-              <button
-                onClick={handleReturnToBrand}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#F5A623] to-[#e8961a] hover:from-[#e8961a] hover:to-[#d4851a] rounded-xl py-4 text-[#0A1931] font-bold text-lg transition-all duration-200 shadow-lg shadow-[#F5A623]/20"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                <ExternalLink className="w-5 h-5" />
-                Return to Brand Page
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1" style={{ fontFamily: "'Syne', sans-serif" }}>
+                Sale Confirmed!
+              </h1>
+              <p className="text-white/50 text-sm">Your item has been sold and payment is being processed.</p>
+            </div>
+
+            <div className="bg-slate-700/80 border border-slate-600/50 rounded-2xl p-6 shadow-xl ring-1 ring-blue-400/10">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-sm font-semibold text-white tracking-widest uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Order Summary
+                </h2>
+                <span className="text-[10px] text-green-400/70 tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                  {orderId}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                {[
+                  { label: "Item", value: product.name },
+                  { label: "Buyer", value: "Anonymous Buyer" },
+                ].map((item) => (
+                  <div key={item.label} className="bg-white/5 rounded-xl p-4">
+                    <div className="text-white/50 text-xs mb-1 font-semibold">{item.label}</div>
+                    <div className="text-white text-sm font-semibold truncate">{item.value}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                  <div className="text-blue-400 text-xs mb-1 font-semibold">Net Proceeds</div>
+                  <div className="text-blue-400 text-xl font-bold">${net.toFixed(2)}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-white/50 text-xs mb-1 font-semibold">Paid via</div>
+                  <div className="text-white text-sm font-semibold">Gift Card</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Return to brand — appears only after Gift Card step completes */}
+          <div className={`transition-all duration-500 ${allDone ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
+            <div className="bg-[#F5A623]/10 border border-[#F5A623]/20 rounded-xl p-4 mb-4 text-center">
+              <p className="text-white/60 text-sm">
+                Your gift card is being issued by <span className="text-[#F5A623] font-semibold">LUMINARY</span>. Return to the brand page to view it.
+              </p>
+            </div>
+            <button
+              onClick={handleReturnToBrand}
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#F5A623] to-[#e8961a] hover:from-[#e8961a] hover:to-[#d4851a] rounded-xl py-4 text-[#0A1931] font-bold text-lg transition-all duration-200 shadow-lg shadow-[#F5A623]/20"
+              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            >
+              <ExternalLink className="w-5 h-5" />
+              Return to Brand Page
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Spinner while processing */}
+          {!allDone && (
+            <div className="text-center text-white/30 text-sm flex items-center justify-center gap-2">
+              <div className="w-3 h-3 border border-white/20 border-t-blue-400/50 rounded-full animate-spin" />
+              Processing...
             </div>
           )}
 
-          {!step4Done && (
-            <div className="text-center text-white/30 text-sm flex items-center justify-center gap-2">
-              <div className="w-3 h-3 border border-white/20 border-t-blue-400/50 rounded-full animate-spin" />
-              Processing your gift card...
-            </div>
-          )}
         </div>
       </div>
     </div>

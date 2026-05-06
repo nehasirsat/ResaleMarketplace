@@ -51,76 +51,77 @@ export default function ListingPending() {
             <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Syne', sans-serif" }}>
               LUMINARY
             </h1>
-            <div className="h-[2px] w-24 bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mx-auto mb-6" />
-            <p className="text-white/40 text-sm">Your listing history</p>
+            <div className="h-[2px] w-24 bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mx-auto" />
           </div>
 
-          {/* Listing history feed */}
-          <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl overflow-hidden shadow-xl mb-6">
-
-            {/* Past listings — non-clickable */}
-            {DUMMY_LISTINGS.map((listing) => {
-              const cfg = statusConfig[listing.status as keyof typeof statusConfig];
-              const Icon = cfg.icon;
-              return (
-                <div key={listing.id} className="flex items-center justify-between px-5 py-4 border-b border-white/5 opacity-60">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.bg}`}>
-                      <Icon className={`w-4 h-4 ${cfg.color}`} />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-white text-sm font-medium truncate">{listing.item}</div>
-                      <div className="text-white/30 text-[10px]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        {listing.id} · {listing.time}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0 ml-4">
-                    <div className="text-white text-sm font-semibold">{listing.net}</div>
-                    <div className={`text-[10px] font-medium ${cfg.color}`}>{cfg.label}</div>
-                  </div>
+          {/* Active listing card */}
+          <div className="bg-[#0d1f3c] border border-[#F5A623]/30 rounded-2xl p-5 mb-3 shadow-xl shadow-[#F5A623]/5">
+            <div className="flex items-center gap-2 mb-4">
+              <span className={`w-2 h-2 rounded-full bg-amber-400 ${pulse ? "opacity-100" : "opacity-40"} transition-opacity duration-700`} />
+              <span className="text-[#F5A623] text-xs font-bold tracking-widest uppercase">Active Listing</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-white font-bold text-base truncate" style={{ fontFamily: "'Syne', sans-serif" }}>
+                  {product.name}
                 </div>
-              );
-            })}
-
-            {/* YOUR new listing — highlighted, with Check Status */}
-            <div className="px-5 py-4 bg-[#F5A623]/5 border-t-2 border-[#F5A623]/30">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-amber-500/10 relative">
-                    <Clock className="w-4 h-4 text-amber-400" />
-                    <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 border-[#0d1f3c] ${pulse ? "opacity-100" : "opacity-0"} transition-opacity duration-700`} />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-white text-sm font-bold truncate">{product.name}</div>
-                    <div className="text-white/40 text-[10px]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                      {displayListingId} · Just now
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 flex-shrink-0 ml-4">
-                  <div className="text-right">
-                    <div className="text-[#F5A623] text-sm font-bold">${net.toFixed(2)}</div>
-                    <div className="text-amber-400 text-[10px] font-medium">Pending</div>
-                  </div>
-                  <button
-                    onClick={handleCheckStatus}
-                    disabled={checking}
-                    className="flex items-center gap-1.5 bg-[#F5A623] hover:bg-[#e8961a] disabled:opacity-60 text-[#0A1931] text-xs font-bold px-3 py-2 rounded-lg transition-all"
-                  >
-                    {checking ? (
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    ) : (
-                      <>
-                        Check Status
-                        <ArrowRight className="w-3 h-3" />
-                      </>
-                    )}
-                  </button>
+                <div className="text-white/40 text-[11px] mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                  {displayListingId} · Just now
                 </div>
               </div>
+              <div className="flex items-center gap-4 flex-shrink-0">
+                <div className="text-right">
+                  <div className="text-[#F5A623] text-lg font-bold">${net.toFixed(2)}</div>
+                  <div className="text-amber-400/70 text-[10px] font-medium">Net proceeds</div>
+                </div>
+                <button
+                  onClick={handleCheckStatus}
+                  disabled={checking}
+                  className="flex items-center gap-1.5 bg-[#F5A623] hover:bg-[#e8961a] disabled:opacity-60 text-[#0A1931] text-sm font-bold px-4 py-2.5 rounded-xl transition-all"
+                >
+                  {checking ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>Check Status <ArrowRight className="w-3.5 h-3.5" /></>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Past listings */}
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-3 px-1">
+              <div className="text-white/30 text-xs font-semibold tracking-widest uppercase">Past Listings</div>
+              <div className="flex-1 h-px bg-white/5" />
             </div>
 
+            <div className="bg-[#0d1f3c]/60 border border-white/5 rounded-2xl overflow-hidden">
+              {DUMMY_LISTINGS.map((listing, i) => {
+                const cfg = statusConfig[listing.status as keyof typeof statusConfig];
+                const Icon = cfg.icon;
+                return (
+                  <div
+                    key={listing.id}
+                    className={`flex items-center justify-between px-5 py-3.5 ${i < DUMMY_LISTINGS.length - 1 ? "border-b border-white/5" : ""}`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${cfg.color}`} />
+                      <div className="min-w-0">
+                        <div className="text-white/70 text-sm font-medium truncate">{listing.item}</div>
+                        <div className="text-white/25 text-[10px]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                          {listing.time}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right flex-shrink-0 ml-4">
+                      <div className="text-white/60 text-sm font-semibold">{listing.net}</div>
+                      <div className={`text-[10px] font-medium ${cfg.color} opacity-70`}>{cfg.label}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="text-center">

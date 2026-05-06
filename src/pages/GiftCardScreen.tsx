@@ -2,31 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
 import { issueGiftCard } from "@/lib/mockApi";
-import StepperTimeline, { TimelineStep } from "@/components/StepperTimeline";
-import { Gift, Copy, Check, Calendar, CreditCard, Package, Tag, RefreshCw, Home, ShoppingBag } from "lucide-react";
+import { Gift, Copy, Check, Calendar, CreditCard, Tag, RefreshCw, Home, ShoppingBag } from "lucide-react";
 
 export default function GiftCardScreen() {
   const navigate = useNavigate();
-  const { giftCardData, setGiftCardData, netProceeds, product, setCurrentStep, orderDetails, corrId } = useResale();
+  const { giftCardData, setGiftCardData, netProceeds, product, setCurrentStep, orderDetails } = useResale();
   const [visible, setVisible] = useState(false);
   const [pulsing, setPulsing] = useState(true);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(!giftCardData);
   const [error, setError] = useState<string | null>(null);
 
-  const steps: TimelineStep[] = [
-    { label: "Item Listed", status: "complete", icon: <Package className="w-4 h-4" /> },
-    { label: "Sale Confirmed", status: "complete", icon: <Tag className="w-4 h-4" /> },
-    { label: "Payment Processed", status: "complete", icon: <CreditCard className="w-4 h-4" /> },
-    { label: "Gift Card Issued", status: "complete", icon: <Gift className="w-4 h-4" /> },
-  ];
+  // Fall back to URL param if context is empty (coming from marketplace tab redirect)
+  const searchParams = new URLSearchParams(window.location.search);
+  const urlNetProceeds = searchParams.get('net_proceeds');
+  const amount = netProceeds || (urlNetProceeds ? parseFloat(urlNetProceeds) : product.price * 0.765);
 
   async function fetchGiftCard() {
     setLoading(true);
     setError(null);
     try {
-      const orderId = orderDetails?.orderId || `ORD-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-      const amount = netProceeds || product.price * 0.765;
+      const orderId = orderDetails?.orderId || `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
       const data = await issueGiftCard(orderId, amount);
       setGiftCardData(data);
     } catch (e: any) {
@@ -54,8 +50,6 @@ export default function GiftCardScreen() {
       setTimeout(() => setCopied(false), 2000);
     }
   }
-
-  const amount = netProceeds || product.price * 0.765;
 
   return (
     <div
@@ -211,15 +205,34 @@ export default function GiftCardScreen() {
             </div>
           )}
 
-          {/* Stepper Timeline */}
+          {/* How to redeem */}
           <div className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl p-6 mb-8 shadow-xl">
             <h2
               className="text-xs font-semibold text-white tracking-widest uppercase mb-5"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
-              Transaction Complete
+              How to Redeem
             </h2>
-            <StepperTimeline steps={steps} />
+            <div className="space-y-4">
+              {[
+                { step: "01", title: "Visit any LUMINARY retailer", desc: "In-store or online at luminary.com — your card works everywhere." },
+                { step: "02", title: "Enter card number & PIN", desc: "Use the card number and PIN above at checkout to apply your balance." },
+                { step: "03", title: "Enjoy your purchase", desc: "Balance never expires. Use it all at once or across multiple purchases." },
+              ].map((item) => (
+                <div key={item.step} className="flex gap-4 items-start">
+                  <div
+                    className="text-[#F5A623]/40 text-xs font-bold mt-0.5 w-6 shrink-0"
+                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                  >
+                    {item.step}
+                  </div>
+                  <div>
+                    <div className="text-white text-sm font-semibold mb-0.5">{item.title}</div>
+                    <div className="text-white/40 text-xs leading-relaxed">{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Back to Shop */}
