@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
 import { initiateResale, mockProducts, Product } from "@/lib/mockApi";
@@ -18,14 +18,21 @@ import {
 
 export default function ProductPage() {
   const navigate = useNavigate();
-  const { product, setCorrId, setCurrentStep, setProduct } = useResale();
+  const { 
+    product, 
+    setCorrId, 
+    setCurrentStep, 
+    setProduct,
+    netProceeds,
+    setNetProceeds
+  } = useResale();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const netProceeds = selectedProduct 
+  const netProceedsCalc = selectedProduct 
     ? (selectedProduct.price * 0.85 * 0.9).toFixed(2)
     : (product.price * 0.85 * 0.9).toFixed(2);
 

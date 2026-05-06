@@ -13,10 +13,17 @@ export default function SaleStatus() {
   // Get corr_id from URL
   const searchParams = new URLSearchParams(window.location.search);
   const corrId = searchParams.get('corr_id');
+  const completedParam = searchParams.get('completed');
 
   useEffect(() => {
     setCurrentStep(3);
-  }, []);
+    
+    // If completed parameter is in URL, mark as completed immediately
+    if (completedParam === 'true') {
+      setSaleCompleted(true);
+      setChecking(false);
+    }
+  }, [completedParam]);
 
   // Poll for sale completion (simulated - in real app, this would check backend)
   useEffect(() => {

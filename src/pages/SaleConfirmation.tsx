@@ -69,8 +69,38 @@ export default function SaleConfirmation() {
   const finalCorrId = urlCorrId || corrId;
 
   function handleReturnToBrand() {
-    // Go directly to gift card page, passing net proceeds via URL
-    navigate(`/giftcard?corr_id=${finalCorrId}&net_proceeds=${net.toFixed(2)}`);
+    console.log('handleReturnToBrand called');
+    console.log('window.opener exists:', !!window.opener);
+    console.log('window.opener.closed:', window.opener ? window.opener.closed : 'N/A');
+    
+    // If opened in a new window from the brand page
+    if (window.opener && !window.opener.closed) {
+      console.log('Opening new brand tab');
+      
+      // Open a new tab with the sale-status page with completed status
+      const newBrandTab = window.open(
+        `/sale-status?corr_id=${corrId}&completed=true`,
+        '_blank'
+      );
+      
+      // Send gift card data to the new tab once it loads
+      if (newBrandTab) {
+        // Wait a bit for the new tab to load, then send the data
+        setTimeout(() => {
+          newBrandTab.postMessage({
+            type: 'SALE_COMPLETED',
+            corrId: corrId,
+            netProceeds: net
+          }, window.location.origin);
+        }, 1000);
+        
+        newBrandTab.focus();
+      }
+    } else {
+      // If not opened in a new window, navigate within the same window
+      console.log('No opener, navigating in same window');
+      navigate(`/sale-status?corr_id=${corrId}`);
+    }
   }
 
   return (
