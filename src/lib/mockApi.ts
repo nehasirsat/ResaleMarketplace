@@ -1,3 +1,40 @@
+import eon001_1 from "@/images/eon-001/eon-001-01.webp";
+import eon001_2 from "@/images/eon-001/eon-001-02.webp";
+import eon001_3 from "@/images/eon-001/eon-001-03.webp";
+import eon002_1 from "@/images/eon-002/eon-002-01.jpg";
+import eon002_2 from "@/images/eon-002/eon-002-02.jpg";
+import eon002_3 from "@/images/eon-002/eon-002-03.jpg";
+import eon003_1 from "@/images/eon-003/eon-003-01.png";
+import eon003_2 from "@/images/eon-003/eon-003-02.png";
+import eon003_3 from "@/images/eon-003/eon-003-03.png";
+import eon004_1 from "@/images/eon-004/eon-004-01.png";
+import eon004_2 from "@/images/eon-004/eon-004-02.png";
+import eon004_3 from "@/images/eon-004/eon-004-03.png";
+import eon005_1 from "@/images/eon-005/eon-005-01.png";
+import eon005_2 from "@/images/eon-005/eon-005-02.png";
+import eon005_3 from "@/images/eon-005/eon-005-03.png";
+import eon006_1 from "@/images/eon-006/eon-006-01.avif";
+import eon006_2 from "@/images/eon-006/eon-006-02.webp";
+import eon006_3 from "@/images/eon-006/eon-006-03.webp";
+
+export const productImages: Record<string, string> = {
+  "eon-001": eon001_1,
+  "eon-002": eon002_1,
+  "eon-003": eon003_1,
+  "eon-004": eon004_1,
+  "eon-005": eon005_1,
+  "eon-006": eon006_1,
+};
+
+export const productAllImages: Record<string, string[]> = {
+  "eon-001": [eon001_1, eon001_2, eon001_3],
+  "eon-002": [eon002_1, eon002_2, eon002_3],
+  "eon-003": [eon003_1, eon003_2, eon003_3],
+  "eon-004": [eon004_1, eon004_2, eon004_3],
+  "eon-005": [eon005_1, eon005_2, eon005_3],
+  "eon-006": [eon006_1, eon006_2, eon006_3],
+};
+
 export interface Product {
   id: string;
   name: string;
@@ -26,7 +63,7 @@ export const mockProducts: Product[] = [
     sku: "LCX1-2024-BLK",
     description:
       "A precision-crafted timepiece featuring a Swiss-made movement, sapphire crystal glass, and 300m water resistance. Limited edition release with EON digital authenticity certification.",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
+    image: eon001_1,
     price: 2450,
     brand: "LUMINARY",
   },
@@ -36,7 +73,7 @@ export const mockProducts: Product[] = [
     sku: "SDP-2024-BLU",
     description:
       "Professional diving watch with 500m water resistance, helium escape valve, and luminous markers. Certified by EON for authenticity and provenance tracking.",
-    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800&q=80",
+    image: eon002_1,
     price: 3200,
     brand: "LUMINARY",
   },
@@ -46,7 +83,7 @@ export const mockProducts: Product[] = [
     sku: "HA-2024-GLD",
     description:
       "Classic automatic movement with exhibition caseback, 18k gold case, and alligator leather strap. Each piece includes EON digital certificate of authenticity.",
-    image: "https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=800&q=80",
+    image: eon003_2,
     price: 4800,
     brand: "LUMINARY",
   },
@@ -56,7 +93,7 @@ export const mockProducts: Product[] = [
     sku: "AGM-2024-SLV",
     description:
       "Dual timezone pilot watch with GMT complication, anti-reflective sapphire crystal, and 200m water resistance. EON certified limited edition.",
-    image: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800&q=80",
+    image: eon004_3,
     price: 2850,
     brand: "LUMINARY",
   },
@@ -66,7 +103,7 @@ export const mockProducts: Product[] = [
     sku: "MPE-2024-WHT",
     description:
       "Sophisticated moonphase complication with date display, mother-of-pearl dial, and diamond hour markers. Authenticated via EON blockchain technology.",
-    image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=800&q=80",
+    image: eon005_1,
     price: 5500,
     brand: "LUMINARY",
   },
@@ -76,7 +113,7 @@ export const mockProducts: Product[] = [
     sku: "STI-2024-GRY",
     description:
       "Lightweight titanium case with ceramic bezel, chronograph function, and scratch-resistant coating. EON digital twin included for resale verification.",
-    image: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=800&q=80",
+    image: eon006_1,
     price: 3600,
     brand: "LUMINARY",
   },

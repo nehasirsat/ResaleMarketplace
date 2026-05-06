@@ -136,11 +136,11 @@ export default function ProductPage() {
                 className="bg-[#0d1f3c]/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-yellow-400/10 hover:ring-yellow-400/20 transition-all duration-300 hover:scale-[1.02]"
               >
                 {/* Image */}
-                <div className="relative overflow-hidden bg-gradient-to-br from-[#0d1f3c] to-[#060f1f] h-64">
+                <div className="relative overflow-hidden bg-slate-900/80 h-64 flex items-center justify-center">
                   <img
                     src={prod.image}
                     alt={prod.name}
-                    className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
+                    className="max-h-64 w-full object-contain"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/60 via-transparent to-transparent" />
                   {/* EON Badge */}
@@ -266,29 +266,29 @@ export default function ProductPage() {
             {/* Item being resold */}
             <div className="px-6 py-4 bg-[#F5A623]/5 border-b border-white/10">
               <div
-                className="text-[10px] text-[#F5A623]/60 uppercase tracking-widest mb-1"
+                className="text-[10px] text-[#F5A623]/60 uppercase tracking-widest mb-2"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 You are reselling
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <img
-                  src={selectedProduct?.image || product.image}
-                  alt={selectedProduct?.name || product.name}
-                  className="w-12 h-12 object-cover rounded-lg border border-white/10 opacity-80"
+                  src={selectedProduct?.image ?? product.image}
+                  alt={selectedProduct?.name ?? product.name}
+                  className="w-20 h-20 object-cover rounded-xl border border-white/10"
                 />
                 <div>
                   <div
                     className="text-white font-bold text-sm"
                     style={{ fontFamily: "'Syne', sans-serif" }}
                   >
-                    {selectedProduct?.name || product.name}
+                    {selectedProduct?.name ?? product.name}
                   </div>
                   <div
-                    className="text-white/40 text-xs"
+                    className="text-white/40 text-xs mt-1"
                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   >
-                    {selectedProduct?.sku || product.sku}
+                    {selectedProduct?.sku ?? product.sku}
                   </div>
                 </div>
               </div>
@@ -383,3 +383,4 @@ export default function ProductPage() {
     </div>
   );
 }
+  

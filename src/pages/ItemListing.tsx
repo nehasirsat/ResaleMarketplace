@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
-import { submitListing } from "@/lib/mockApi";
+import { submitListing, mockProducts, productAllImages } from "@/lib/mockApi";
 import { Shield, Lock, DollarSign, Plus, X } from "lucide-react";
 
 export default function ItemListing() {
   const navigate = useNavigate();
-  const { product, corrId, setCurrentStep, setListingId, setNetProceeds, setCorrId } = useResale();
+  const { product, corrId, setCurrentStep, setListingId, setNetProceeds, setCorrId, setProduct } = useResale();
 
   const [price, setPrice] = useState(product.price.toString());
   const [loading, setLoading] = useState(false);
   const [extraPhotos, setExtraPhotos] = useState<string[]>([]);
+  const [activeImage, setActiveImage] = useState<string>(product.image);
 
   function handleAddPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -30,18 +31,26 @@ export default function ItemListing() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const urlCorrId = searchParams.get('corr_id');
+    const urlProductId = searchParams.get('product_id');
     const urlNetProceeds = searchParams.get('net_proceeds');
     const urlListingPrice = searchParams.get('listing_price');
-    
+
     if (urlCorrId && !corrId) {
       setCorrId(urlCorrId);
     }
-    
+
+    if (urlProductId) {
+      const found = mockProducts.find((p) => p.id === urlProductId);
+      if (found) {
+        setProduct(found);
+        setActiveImage(found.image);
+      }
+    }
+
     if (urlNetProceeds) {
       setNetProceeds(parseFloat(urlNetProceeds));
     }
-    
-    // Set listing price from URL if available
+
     if (urlListingPrice) {
       setPrice(urlListingPrice);
     }
@@ -135,12 +144,12 @@ export default function ItemListing() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="bg-slate-700/80 backdrop-blur border border-slate-600/50 rounded-2xl overflow-hidden shadow-xl shadow-black/50">
 
-              {/* Main image — top of card, full width */}
-              <div className="relative w-full h-64 bg-slate-900/50">
+              {/* Main image */}
+              <div className="relative w-full bg-slate-900/80 flex items-center justify-center" style={{ minHeight: "20rem" }}>
                 <img
-                  src={product.image}
+                  src={activeImage}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="max-h-80 w-full object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
                 <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full px-2.5 py-1">
@@ -149,12 +158,26 @@ export default function ItemListing() {
                 </div>
               </div>
 
-              {/* Thumbnail strip + add button */}
-              <div className="flex gap-2 px-4 py-3 border-b border-slate-600/50 bg-slate-800/40">
-                {/* Extra photos only */}
+              {/* Thumbnail strip */}
+              <div className="flex gap-2 px-4 py-3 border-b border-slate-600/50 bg-slate-800/40 overflow-x-auto">
+                {(productAllImages[product.id] ?? [product.image]).map((src, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveImage(src)}
+                    className={`relative w-14 h-14 rounded-lg overflow-hidden border flex-shrink-0 transition-all bg-slate-900/50 ${
+                      activeImage === src
+                        ? "border-blue-500 ring-2 ring-blue-500/40"
+                        : "border-slate-600 hover:border-slate-400"
+                    }`}
+                  >
+                    <img src={src} alt="" className="w-full h-full object-contain" />
+                  </button>
+                ))}
+                {/* Extra uploaded photos */}
                 {extraPhotos.map((src, i) => (
-                  <div key={i} className="relative w-14 h-14 rounded-lg overflow-hidden border border-slate-600 flex-shrink-0 group">
-                    <img src={src} alt="" className="w-full h-full object-cover" />
+                  <div key={`extra-${i}`} className="relative w-14 h-14 rounded-lg overflow-hidden border border-slate-600 flex-shrink-0 group bg-slate-900/50">
+                    <img src={src} alt="" className="w-full h-full object-contain" />
                     <button
                       type="button"
                       onClick={() => handleRemovePhoto(i)}
