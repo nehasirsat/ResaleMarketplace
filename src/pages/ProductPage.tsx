@@ -378,7 +378,7 @@ export default function ProductPage() {
                   </>
                 ) : (
                   <>
-                    Proceed to Marketplace
+                    Proceed to Resale
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
