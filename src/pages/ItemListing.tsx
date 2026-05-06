@@ -10,6 +10,7 @@ export default function ItemListing() {
 
   const [price, setPrice] = useState(product.price.toString());
   const [loading, setLoading] = useState(false);
+  const [giftCardAgreed, setGiftCardAgreed] = useState(false);
   const [extraPhotos, setExtraPhotos] = useState<string[]>([]);
   const [activeImage, setActiveImage] = useState<string>(product.image);
 
@@ -239,11 +240,39 @@ export default function ItemListing() {
               </div>
             </div>
 
+            {/* Gift card payout acknowledgement */}
+            <div
+              onClick={() => setGiftCardAgreed((v) => !v)}
+              className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
+                giftCardAgreed
+                  ? "bg-amber-500/10 border-amber-500/30"
+                  : "bg-slate-700/50 border-slate-600/50 hover:border-slate-500"
+              }`}
+            >
+              <div className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center border-2 transition-all duration-200 ${
+                giftCardAgreed ? "bg-amber-500 border-amber-500" : "border-slate-500 bg-transparent"
+              }`}>
+                {giftCardAgreed && (
+                  <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">
+                  I understand payment will be issued as a gift card
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Your net proceeds will be paid out as a <span className="text-amber-400 font-medium">LUMINARY gift card</span>, not cash or bank transfer.
+                </p>
+              </div>
+            </div>
+
             {/* Submit */}
             <button
               type="submit"
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 py-3.5 rounded-xl text-white font-bold transition-all duration-200 shadow-lg shadow-blue-500/20 disabled:opacity-60"
+              disabled={loading || !giftCardAgreed}
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 py-3.5 rounded-xl text-white font-bold transition-all duration-200 shadow-lg shadow-blue-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
