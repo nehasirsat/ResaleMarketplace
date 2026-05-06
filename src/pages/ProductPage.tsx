@@ -92,7 +92,7 @@ export default function ProductPage() {
             </div>
             <div className="relative">
               <button
-                onClick={() => navigate("/marketplace-home")}
+                onClick={() => navigate("/")}
                 className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 hover:bg-white/10 transition text-white/60 hover:text-white"
               >
                 <Home className="w-4 h-4" />

@@ -158,7 +158,7 @@ export default function MarketplaceHome() {
                     <span className="pointer-events-none">My Orders</span>
                   </button>
                   <button
-                    onClick={() => navigate("/giftcard")}
+                    onClick={() => navigate("/my-giftcards")}
                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition"
                   >
                     <Gift className="w-4 h-4 text-[#F5A623] pointer-events-none" />

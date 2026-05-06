@@ -9,6 +9,7 @@ import ItemListing from "@/pages/ItemListing";
 import SaleConfirmation from "@/pages/SaleConfirmation";
 import ListingPending from "@/pages/ListingPending";
 import GiftCardScreen from "@/pages/GiftCardScreen";
+import MyGiftCards from "@/pages/MyGiftCards";
 import SaleStatus from "@/pages/SaleStatus";
 
 import MarketplaceHome from "@/pages/MarketplaceHome";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/redirect" element={<RedirectScreen />} />
           <Route path="/sale-status" element={<SaleStatus />} />
           <Route path="/giftcard" element={<GiftCardScreen />} />
+          <Route path="/my-giftcards" element={<MyGiftCards />} />
           <Route path="/past-orders" element={<ProductPage />} />
 
           {/* Marketplace-side routes (post-login) */}
