@@ -24,13 +24,19 @@ function AppContent() {
     console.log('App: Current window.name:', window.name);
     console.log('App: Current location:', window.location.href);
     
+    const baseUrl = import.meta.env.VITE_BASE_URL || window.location.origin;
+    
     function handleMessage(event: MessageEvent) {
       console.log('App: Received message:', event.data);
       console.log('App: Message origin:', event.origin);
       console.log('App: Window location origin:', window.location.origin);
       
-      // Validate origin for security
-      if (event.origin !== window.location.origin) {
+      // Validate origin for security - accept both localhost and configured base URL
+      const isValidOrigin = event.origin === window.location.origin || 
+                           event.origin === baseUrl ||
+                           event.origin === 'http://localhost:5173';
+      
+      if (!isValidOrigin) {
         console.warn('App: Rejected message from untrusted origin:', event.origin);
         return;
       }

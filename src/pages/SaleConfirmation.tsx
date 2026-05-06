@@ -42,8 +42,10 @@ export default function SaleConfirmation() {
       setAllDone(true);
     }, 3200));
 
+    const baseUrl = import.meta.env.VITE_BASE_URL || window.location.origin;
+    
     if (window.opener) {
-      window.opener.postMessage({ type: 'SALE_COMPLETED', corrId, netProceeds: net }, window.location.origin);
+      window.opener.postMessage({ type: 'SALE_COMPLETED', corrId, netProceeds: net }, baseUrl);
     }
 
     return () => { clearTimeout(t); timers.forEach(clearTimeout); };
@@ -73,13 +75,15 @@ export default function SaleConfirmation() {
     console.log('window.opener exists:', !!window.opener);
     console.log('window.opener.closed:', window.opener ? window.opener.closed : 'N/A');
     
+    const baseUrl = import.meta.env.VITE_BASE_URL || window.location.origin;
+    
     // If opened in a new window from the brand page
     if (window.opener && !window.opener.closed) {
       console.log('Opening new brand tab');
       
       // Open a new tab with the sale-status page with completed status
       const newBrandTab = window.open(
-        `/sale-status?corr_id=${corrId}&completed=true`,
+        `${baseUrl}/sale-status?corr_id=${corrId}&completed=true`,
         '_blank'
       );
       
@@ -91,7 +95,7 @@ export default function SaleConfirmation() {
             type: 'SALE_COMPLETED',
             corrId: corrId,
             netProceeds: net
-          }, window.location.origin);
+          }, baseUrl);
         }, 1000);
         
         newBrandTab.focus();

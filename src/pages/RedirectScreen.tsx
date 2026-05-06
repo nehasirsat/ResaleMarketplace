@@ -60,8 +60,10 @@ export default function RedirectScreen() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       const t = setTimeout(() => {
         setCurrentStep(3);
+        const baseUrl = import.meta.env.VITE_BASE_URL || window.location.origin;
+        
         // Open marketplace in new tab
-        const marketplaceUrl = `/marketplace-login?${urlParams.toString()}`;
+        const marketplaceUrl = `${baseUrl}/marketplace-login?${urlParams.toString()}`;
         window.open(marketplaceUrl, '_blank');
         
         // Navigate to status page on brand site
