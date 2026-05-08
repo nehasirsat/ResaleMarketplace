@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResale } from "@/context/ResaleContext";
-import ProgressStepper from "@/components/ProgressStepper";
-import CorrelationBadge from "@/components/CorrelationBadge";
 import { Gift, ArrowRight, ArrowLeft, CreditCard, Package } from "lucide-react";
 
 export default function InterstitialPage() {
@@ -22,12 +20,9 @@ export default function InterstitialPage() {
     <div
       className={`min-h-screen bg-[#0A1931] transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
     >
-      <ProgressStepper />
-      <CorrelationBadge />
-
       <div className="fixed inset-0 bg-gradient-to-br from-[#0A1931] via-[#0d1f3c] to-[#060f1f] pointer-events-none" />
 
-      <div className="relative z-10 pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           {/* Icon header */}
           <div className="text-center mb-10">

@@ -123,9 +123,36 @@ export const mockProduct: Product = mockProducts[0];
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export async function initiateResale(productId: string): Promise<string> {
-  await delay(800);
-  return `corr_${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+export interface InitiateResaleResponse {
+  correlation_id: string;
+  interstitial_url: string;
+}
+
+export async function initiateResale(
+  userId: string,
+  productId: string
+): Promise<InitiateResaleResponse> {
+  const apiUrl = import.meta.env.VITE_RESALE_API_URL;
+  const apiKey = import.meta.env.VITE_RESALE_API_KEY;
+
+  const response = await fetch(`${apiUrl}/api/v1/resales`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": apiKey,
+    },
+    body: JSON.stringify({
+      user_id: userId,
+      product_id: productId,
+      timestamp: new Date().toISOString(),
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Resale initiation failed: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 export async function submitListing(

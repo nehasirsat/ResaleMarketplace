@@ -13,6 +13,7 @@ import MyGiftCards from "@/pages/MyGiftCards";
 import SaleStatus from "@/pages/SaleStatus";
 
 import MarketplaceHome from "@/pages/MarketplaceHome";
+import InterstitialPage from "@/pages/InterstitialPage";
 
 function AppContent() {
   const navigate = useNavigate();
@@ -88,6 +89,7 @@ function AppContent() {
       <Route path="/giftcard" element={<GiftCardScreen />} />
       <Route path="/my-giftcards" element={<MyGiftCards />} />
       <Route path="/past-orders" element={<ProductPage />} />
+      <Route path="/resale/interstitial" element={<InterstitialPage />} />
 
       {/* Marketplace-side routes (post-login) */}
       <Route path="/marketplace/list-item" element={<ItemListing />} />
